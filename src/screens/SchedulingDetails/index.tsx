@@ -67,46 +67,44 @@ export function SchedulingDetails() {
   const rentTotal = Number(dates.length * car.rent.price);
 
   async function handleConfirmRental() {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+      const schedulesByCar = await api
+        .get(`/schedules_bycars/${car.id}`)
+        .then((r) => r.data.unavailable_dates)
+        .catch((e) => []);
+      console.log(schedulesByCar);
+      const unavailable_dates = [...schedulesByCar, ...dates];
 
-    const unavailable_dates = [
-      ...schedulesByCar.data.unavailable_dates,
-      ...dates,
-    ];
-
-    await api.post("schedules_byuser", {
-      user_id: 1,
-      car_id: car.id,
-      startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
-      endDate: format(
-        getPlatformDate(new Date(dates[dates.length - 1])),
-        "dd/MM/yyyy"
-      ),
-      total: rentTotal,
-    });
-
-    await api
-      .post(`/schedules_bycars}`, {
-        // id: car.id,
-        unavailable_dates,
-      })
-      .then(() => navigation.navigate("SchedulingComplete"))
-      .catch(() => {
-        setLoading(false);
-        Alert.alert("Não foi possível confirmar o agendamento.");
+      await api.post("schedules_byuser", {
+        user_id: 1,
+        car_id: car.id,
+        startDate: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+        endDate: format(
+          getPlatformDate(new Date(dates[dates.length - 1])),
+          "dd/MM/yyyy"
+        ),
+        total: rentTotal,
       });
-  }
 
-  //   api
-  //     .put(`/schedules/${car.id}`, {
-  //       id: car.id,
-  //       unavailable_dates,
-  //     })
-  //     .then(() => navigation.navigate("SchedulingComplete"))
-  //     .catch(() => Alert.alert("Não foi possível confirmar o agendamento."));
-  // }
+      if (schedulesByCar.length > 0) {
+        await api.put(`schedules_bycars/${car.id}`, {
+          id: car.id,
+          unavailable_dates,
+        });
+      } else {
+        await api.post(`/schedules_bycars`, {
+          id: car.id,
+          unavailable_dates,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function handleBack() {
     navigation.goBack();
