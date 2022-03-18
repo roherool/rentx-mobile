@@ -1,8 +1,8 @@
-import "react-native-gesture-handler";
 import React from "react";
 import AppLoading from "expo-app-loading";
 
 import { ThemeProvider } from "styled-components";
+import { AppProvider } from "./src/hooks";
 
 import {
   useFonts,
@@ -17,7 +17,7 @@ import {
 } from "@expo-google-fonts/archivo";
 
 import { Routes } from "./src/routes";
-import { RootStackParamList } from "./src/routes/stack.routes";
+import { RootStackParamList } from "./src/routes/app.stack.routes";
 
 import theme from "./src/styles/theme";
 
@@ -42,7 +42,9 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Routes />
+      <AppProvider>
+        <Routes />
+      </AppProvider>
     </ThemeProvider>
   );
 }

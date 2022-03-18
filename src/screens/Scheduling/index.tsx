@@ -15,29 +15,20 @@ import {
 } from "../../components/Calendar";
 
 import { CarDTO } from "../../dtos/Car.dto";
+import { Car as CarModel } from "../../database/model/Car";
 import { getPlatformDate } from "../../utils/getPlatformDate";
 
 import ArrowSvg from "../../assets/arrow.svg";
 
-import {
-  Container,
-  Header,
-  Title,
-  RentalPeriod,
-  DateInfo,
-  DateTitle,
-  DateValue,
-  Content,
-  Footer,
-} from "./styles";
+import * as s from "./styles";
 
-interface RentalPeriod {
+interface RentalPeriodProps {
   startFormatted: string;
   endFormatted: string;
 }
 
 interface Params {
-  car: CarDTO;
+  car: CarModel;
 }
 
 export function Scheduling() {
@@ -47,8 +38,8 @@ export function Scheduling() {
   const [markedDates, setMarkedDates] = useState<MarkedDateProps>(
     {} as MarkedDateProps
   );
-  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
-    {} as RentalPeriod
+  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriodProps>(
+    {} as RentalPeriodProps
   );
 
   const theme = useTheme();
@@ -93,8 +84,8 @@ export function Scheduling() {
   }
 
   return (
-    <Container>
-      <Header>
+    <s.Container>
+      <s.Header>
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"
@@ -102,40 +93,40 @@ export function Scheduling() {
         />
         <BackButton onPress={handleBack} color={theme.colors.shape} />
 
-        <Title>
+        <s.Title>
           Escolha uma data {"\n"}de início e fim {"\n"}do aluguel
-        </Title>
+        </s.Title>
 
-        <RentalPeriod>
-          <DateInfo>
-            <DateTitle>DE</DateTitle>
-            <DateValue selected={!!rentalPeriod.startFormatted}>
+        <s.RentalPeriod>
+          <s.DateInfo>
+            <s.DateTitle>DE</s.DateTitle>
+            <s.DateValue selected={!!rentalPeriod.startFormatted}>
               {rentalPeriod.startFormatted}
-            </DateValue>
-          </DateInfo>
+            </s.DateValue>
+          </s.DateInfo>
 
           <ArrowSvg />
 
-          <DateInfo>
-            <DateTitle>ATÉ</DateTitle>
-            <DateValue selected={!!rentalPeriod.endFormatted}>
+          <s.DateInfo>
+            <s.DateTitle>ATÉ</s.DateTitle>
+            <s.DateValue selected={!!rentalPeriod.endFormatted}>
               {rentalPeriod.endFormatted}
-            </DateValue>
-          </DateInfo>
-        </RentalPeriod>
-      </Header>
+            </s.DateValue>
+          </s.DateInfo>
+        </s.RentalPeriod>
+      </s.Header>
 
-      <Content>
+      <s.Content>
         <Calendar markedDates={markedDates} onDayPress={handleChangeDate} />
-      </Content>
+      </s.Content>
 
-      <Footer>
+      <s.Footer>
         <Button
           title="Confirmar"
           onPress={handleConfirmRentalPeriod}
           enabled={!!rentalPeriod.startFormatted}
         />
-      </Footer>
-    </Container>
+      </s.Footer>
+    </s.Container>
   );
 }

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { StatusBar } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { RootStackParamList } from "../../routes/auth.routes";
+
 import BrandSvg from "../../assets/brand.svg";
 import LogoSvg from "../../assets/logo.svg";
 
@@ -19,7 +21,7 @@ import { Container } from "./styles";
 export function Splash() {
   const splashAnimation = useSharedValue(0);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<RootStackParamList>();
 
   const brandStyle = useAnimatedStyle(() => {
     return {
@@ -54,7 +56,7 @@ export function Splash() {
   });
 
   function startApp() {
-    navigation.navigate("Home");
+    navigation.navigate("SignIn");
   }
 
   useEffect(() => {

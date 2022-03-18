@@ -93,3 +93,10 @@ export const Footer = styled.View`
 
   width: 100%;
 `;
+
+export const OfflineInfo = styled.Text`
+  color: ${({ theme }) => theme.colors.main};
+  font-family: ${({ theme }) => theme.fonts.primary_400};
+  font-size: ${RFValue(10)}px;
+  text-align: center;
+`;
